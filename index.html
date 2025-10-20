@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Generation Form - Just Move Vancouver</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        h2 {
+            color: #1e3a8a;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .section-title {
+            color: #1e3a8a;
+            font-size: 20px;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: #1e40af;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #f97316;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231e40af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: #3b82f6;
+            background-color: white;
+        }
+
+        .radio-option input[type="radio"],
+        .checkbox-option input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #1e40af;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(251, 146, 60, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover::after {
+            opacity: 1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .message.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="logo-container">
+            <img src="https://i.imgur.com/xD5Q6XC.png" alt="Just Move Vancouver Logo">
+        </div>
+        
+        <h2>Quote Generation Form</h2>
+        <p class="subtitle">Fill out the form below and we'll get back to you with a detailed quote</p>
+        
+        <div id="messageBox" class="message"></div>
+        
+        <form id="quoteForm">
+            <!-- Section 1: Contact Info -->
+            <h3 class="section-title">Section 1: Contact Info</h3>
+            
+            <div class="form-group">
+                <label for="name">Your name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required placeholder="Your full name">
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                </div>
+            </div>
+
+            <!-- Section 2: Move Details -->
+            <h3 class="section-title">Section 2: Move Details</h3>
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="moveDate">Preferred Date of the Move <span class="required">*</span></label>
+                    <input type="date" id="moveDate" name="moveDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="startTime">Preferred Start Time <span class="required">*</span></label>
+                    <input type="time" id="startTime" name="startTime" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="flexibility">Date and Time flexibility - explain <span class="required">*</span></label>
+                <textarea id="flexibility" name="flexibility" required placeholder="Please describe your flexibility with the date and time"></textarea>
+            </div>
+
+            <!-- Section 3: Moving From -->
+            <h3 class="section-title">Section 3: Moving From</h3>
+            
+            <div class="form-group">
+                <label for="pickupAddress">Pickup Address <span class="required">*</span></label>
+                <input type="text" id="pickupAddress" name="pickupAddress" required placeholder="123 Main St, City, State ZIP">
+            </div>
+
+            <div class="form-group">
+                <label>Type of Home <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="pickupHomeType" value="Apartment" required>
+                        Apartment
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupHomeType" value="House">
+                        House
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupHomeType" value="Condo">
+                        Condo
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupHomeType" value="Basement suite">
+                        Basement suite
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupHomeType" value="Storage">
+                        Storage
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="pickupBedrooms">No. of bedrooms at pickup? <span class="required">*</span></label>
+                <select id="pickupBedrooms" name="pickupBedrooms" required>
+                    <option value="">Select number of bedrooms</option>
+                    <option value="Studio">Studio</option>
+                    <option value="1 Bedroom">1 Bedroom</option>
+                    <option value="2 Bedrooms">2 Bedrooms</option>
+                    <option value="3 Bedrooms">3 Bedrooms</option>
+                    <option value="4 Bedrooms">4 Bedrooms</option>
+                    <option value="5+ Bedrooms">5+ Bedrooms</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Elevator access at pick-up? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="pickupElevator" value="Yes" required>
+                        Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupElevator" value="No">
+                        No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" id="pickupStairsGroup" style="display: none;">
+                <label for="pickupStairs">No. of stairs at pickup (only if no elevator)?</label>
+                <select id="pickupStairs" name="pickupStairs">
+                    <option value="">Select number of stairs</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4+">4+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Walk distance from the access point to the door of the unit <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="pickupWalkDistance" value="0-10 meters" required>
+                        0-10 meters
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupWalkDistance" value="10-25 meters">
+                        10-25 meters
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupWalkDistance" value="25-50 meters">
+                        25-50 meters
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="pickupWalkDistance" value="50 + meters">
+                        50 + meters
+                    </label>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Item Volume:</strong><br>
+                1. Light (minimal furniture, few boxes – e.g., student or minimalist)<br>
+                2. Medium (average amount of furniture, standard apartment or house move)<br>
+                3. Heavy (large furniture, many boxes, or years worth of accumulated belongings)
+            </div>
+
+            <div class="form-group">
+                <label>Item Volume <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="itemVolume" value="Light" required>
+                        Light
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="itemVolume" value="Medium">
+                        Medium
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="itemVolume" value="Heavy">
+                        Heavy
+                    </label>
+                </div>
+            </div>
+
+            <!-- Section 4: Moving To -->
+            <h3 class="section-title">Section 4: Moving To</h3>
+            
+            <div class="form-group">
+                <label for="dropoffAddress">Drop-off Address <span class="required">*</span></label>
+                <input type="text" id="dropoffAddress" name="dropoffAddress" required placeholder="456 Oak Ave, City, State ZIP">
+            </div>
+
+            <div class="form-group">
+                <label for="driveTime">Drive time to the drop-off <span class="required">*</span></label>
+                <input type="text" id="driveTime" name="driveTime" required placeholder="e.g., 30 minutes">
+            </div>
+
+            <div class="form-group">
+                <label>Type of Home (Drop-off) <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffHomeType" value="Apartment" required>
+                        Apartment
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffHomeType" value="House">
+                        House
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffHomeType" value="Condo">
+                        Condo
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffHomeType" value="Basement suite">
+                        Basement suite
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffHomeType" value="Storage">
+                        Storage
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Elevator access at drop-off <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffElevator" value="Yes" required>
+                        Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffElevator" value="No">
+                        No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" id="dropoffStairsGroup" style="display: none;">
+                <label for="dropoffStairs">No. of stairs at drop-off (only if no elevator)?</label>
+                <select id="dropoffStairs" name="dropoffStairs">
+                    <option value="">Select number of stairs</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4+">4+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Walking distance from the access point to the door of the unit at drop off <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffWalkDistance" value="0-10 meters" required>
+                        0-10 meters
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffWalkDistance" value="10-25 meters">
+                        10-25 meters
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffWalkDistance" value="25-50 meters">
+                        25-50 meters
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="dropoffWalkDistance" value="50+ meters">
+                        50+ meters
+                    </label>
+                </div>
+            </div>
+
+            <!-- Section 5: Services Needed -->
+            <h3 class="section-title">Section 5: Services Needed</h3>
+            
+            <div class="form-group">
+                <label>Packing services needed? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="packingNeeded" value="Yes" required>
+                        Yes
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="packingNeeded" value="No">
+                        No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" id="packingHoursGroup" style="display: none;">
+                <label>Would you like our help with all of the packing or a set amount of hours?</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="packingHours" value="All">
+                        All
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="packingHours" value="1 hour">
+                        1 hour
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="packingHours" value="2 hours">
+                        2 hours
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="packingHours" value="3 hours">
+                        3 hours
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="packingHours" value="4 hours">
+                        4 hours
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="packingHours" value="Other">
+                        Other
+                        <input type="text" id="packingHoursOther" placeholder="Number of hours" style="margin-left: 10px; width: 150px;">
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Any piano? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="piano" value="No" required>
+                        No
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="piano" value="Yes – Upright Piano">
+                        Yes – Upright Piano
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="piano" value="Yes – Grand Piano">
+                        Yes – Grand Piano
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="garbageDisposal">Garbage disposal - explain here (leave blank if not needed)</label>
+                <textarea id="garbageDisposal" name="garbageDisposal" placeholder="Any garbage disposal needs"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>No. of movers needed <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="moversNeeded" value="1" required>
+                        1
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="moversNeeded" value="2">
+                        2
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="moversNeeded" value="3">
+                        3
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="moversNeeded" value="4">
+                        4
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="moversNeeded" value="5">
+                        5
+                    </label>
+                </div>
+            </div>
+
+            <!-- Section 6: Anything Else? -->
+            <h3 class="section-title">Section 6: Anything Else?</h3>
+            
+            <div class="form-group">
+                <label for="specialInstructions">Any special instructions?</label>
+                <textarea id="specialInstructions" name="specialInstructions" placeholder="Any special instructions or requirements"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="additionalInfo">Anything else worth mentioning for the purpose of getting an accurate quote?</label>
+                <textarea id="additionalInfo" name="additionalInfo" placeholder="Any additional information (other locations, special items, etc.)"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quote Request</button>
+        </form>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://n8n-movers-project-n8n.5gwahg.easypanel.host/webhook/db25aa49-c8ad-4a02-bfa6-7810871a2599';
+        
+        const form = document.getElementById('quoteForm');
+        const messageBox = document.getElementById('messageBox');
+
+        // Show/hide stairs fields based on elevator selection
+        document.querySelectorAll('input[name="pickupElevator"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const stairsGroup = document.getElementById('pickupStairsGroup');
+                stairsGroup.style.display = e.target.value === 'No' ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('input[name="dropoffElevator"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const stairsGroup = document.getElementById('dropoffStairsGroup');
+                stairsGroup.style.display = e.target.value === 'No' ? 'block' : 'none';
+            });
+        });
+
+        // Show/hide packing hours based on packing needed
+        document.querySelectorAll('input[name="packingNeeded"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const hoursGroup = document.getElementById('packingHoursGroup');
+                hoursGroup.style.display = e.target.value === 'Yes' ? 'block' : 'none';
+            });
+        });
+
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = `message ${type}`;
+            messageBox.style.display = 'block';
+            
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 5000);
+        }
+
+        function getFormData() {
+            const formData = new FormData(form);
+            const data = {
+                "Timestamp": new Date().toISOString(),
+                "Your name": formData.get('name'),
+                "Email": formData.get('email'),
+                "Phone number": formData.get('phone'),
+                "Preferred Date of the Move": formData.get('moveDate'),
+                "Preferred Start Time": formData.get('startTime'),
+                "Date and Time flexibility - explain": formData.get('flexibility'),
+                "Pickup Address": formData.get('pickupAddress'),
+                "Type of Home": formData.get('pickupHomeType'),
+                "No. of bedrooms at pickup?": formData.get('pickupBedrooms'),
+                "Elevator access at pick-up?": formData.get('pickupElevator'),
+                "No. of stairs at pickup (only if no elevator)?": formData.get('pickupStairs') || null,
+                "Walk distance from the access point to the door of the unit": formData.get('pickupWalkDistance'),
+                "Item Volume": formData.get('itemVolume'),
+                "Drop-off Address": formData.get('dropoffAddress'),
+                "Drive time to the drop-off": formData.get('driveTime'),
+                "Type of Home (Drop-off)": formData.get('dropoffHomeType'),
+                "Elevator access at drop-off": formData.get('dropoffElevator'),
+                "No. of stairs at drop-off (only if no elevator)?": formData.get('dropoffStairs') || null,
+                "Walking distance from the access point to the door of the unit at drop off": formData.get('dropoffWalkDistance'),
+                "Packing services needed?": formData.get('packingNeeded'),
+                "Would you like our help with all of the packing or a set amount of hours (For other please just write a number of hours)": formData.get('packingHours') === 'Other' 
+                    ? document.getElementById('packingHoursOther').value 
+                    : formData.get('packingHours'),
+                "Any piano?": formData.get('piano'),
+                "Garbage disposal - explain here (leave blank if not needed)": formData.get('garbageDisposal'),
+                "No. of movers needed": formData.get('moversNeeded'),
+                "Any special instructions?": formData.get('specialInstructions'),
+                "Anything else worth mentioning for the purpose of getting an accurate quote (other locations etc)?": formData.get('additionalInfo')
+            };
+            
+            return data;
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            const data = getFormData();
+            
+            console.log('Submitting form data:', data);
+            console.log('Webhook URL:', WEBHOOK_URL);
+            
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (response.ok) {
+                    showMessage('Thank you! Your quote request has been submitted. We\'ll contact you shortly.', 'success');
+                    form.reset();
+                } else {
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    showMessage('There was an issue submitting your request. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage('Unable to submit form. Please check your connection and try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Quote Request';
+            }
+        });
+    </script>
+</body>
+</html>
