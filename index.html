@@ -621,6 +621,14 @@
         const form = document.getElementById('quoteForm');
         const messageBox = document.getElementById('messageBox');
 
+        // Extract referee ID from URL parameter
+        function getRefereeId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('ref');
+        }
+
+        const refereeId = getRefereeId();
+
         // Show/hide stairs fields based on elevator selection
         document.querySelectorAll('input[name="pickupElevator"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
@@ -687,6 +695,11 @@
                 "Any special instructions?": formData.get('specialInstructions'),
                 "Anything else worth mentioning for the purpose of getting an accurate quote (other locations etc)?": formData.get('additionalInfo')
             };
+            
+            // Add referredBy if ref parameter exists in URL
+            if (refereeId) {
+                data.referredBy = refereeId;
+            }
             
             return data;
         }
