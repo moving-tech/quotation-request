@@ -207,24 +207,48 @@
         }
 
         .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 16px;
             display: none;
+            animation: slideDown 0.4s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.success {
-            background-color: #d1fae5;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             color: #065f46;
-            border: 1px solid #6ee7b7;
+            border: 2px solid #10b981;
+        }
+
+        .message.success::before {
+            content: '✓ ';
+            font-size: 20px;
         }
 
         .message.error {
-            background-color: #fee2e2;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
             color: #991b1b;
-            border: 1px solid #fca5a5;
+            border: 2px solid #dc2626;
+        }
+
+        .message.error::before {
+            content: '⚠ ';
+            font-size: 20px;
         }
 
         .row {
@@ -657,13 +681,40 @@
             messageBox.className = `message ${type}`;
             messageBox.style.display = 'block';
             
+            // Scroll to message
+            messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Auto-hide after 8 seconds
             setTimeout(() => {
                 messageBox.style.display = 'none';
-            }, 5000);
+            }, 8000);
+        }
+
+        // Parse drive time to extract number
+        function parseDriveTime(driveTimeString) {
+            // Extract first number from string (e.g., "30 minutes" -> 30, "1.5 hours" -> 1.5)
+            const match = driveTimeString.match(/(\d+\.?\d*)/);
+            if (match) {
+                const number = parseFloat(match[1]);
+                
+                // If the string contains "hour" or "hr", convert to minutes
+                if (driveTimeString.toLowerCase().includes('hour') || driveTimeString.toLowerCase().includes('hr')) {
+                    return Math.round(number * 60);
+                }
+                
+                // Otherwise assume it's already in minutes
+                return Math.round(number);
+            }
+            
+            // Return 0 if no number found
+            return 0;
         }
 
         function getFormData() {
             const formData = new FormData(form);
+            const driveTimeRaw = formData.get('driveTime');
+            const driveTimeNumber = parseDriveTime(driveTimeRaw);
+            
             const data = {
                 "Timestamp": new Date().toISOString(),
                 "Your name": formData.get('name'),
@@ -680,7 +731,8 @@
                 "Walk distance from the access point to the door of the unit": formData.get('pickupWalkDistance'),
                 "Item Volume": formData.get('itemVolume'),
                 "Drop-off Address": formData.get('dropoffAddress'),
-                "Drive time to the drop-off": formData.get('driveTime'),
+                "Drive time to the drop-off": driveTimeNumber,
+                "Drive time to the drop-off (original)": driveTimeRaw,
                 "Type of Home (Drop-off)": formData.get('dropoffHomeType'),
                 "Elevator access at drop-off": formData.get('dropoffElevator'),
                 "No. of stairs at drop-off (only if no elevator)?": formData.get('dropoffStairs') || null,
@@ -728,16 +780,17 @@
                 console.log('Response status:', response.status);
                 
                 if (response.ok) {
-                    showMessage('Thank you! Your quote request has been submitted. We\'ll contact you shortly.', 'success');
+                    showMessage('Thank you! Your quote request has been submitted successfully. We\'ll contact you shortly with your personalized quote.', 'success');
                     form.reset();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     const errorText = await response.text();
                     console.error('Error response:', errorText);
-                    showMessage('There was an issue submitting your request. Please try again.', 'error');
+                    showMessage('There was an issue submitting your request. Please try again or contact us directly.', 'error');
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
-                showMessage('Unable to submit form. Please check your connection and try again.', 'error');
+                showMessage('Unable to submit form. Please check your internet connection and try again.', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Quote Request';
