@@ -741,8 +741,19 @@
                     <h3 class="section-title">Section 3: Moving From</h3>
                     
                     <div class="form-group">
-                        <label for="pickupAddress">Pickup Address <span class="required">*</span></label>
-                        <input type="text" id="pickupAddress" name="pickupAddress" required placeholder="123 Main St, City, State ZIP">
+                        <label for="pickupStreet">Street Address <span class="required">*</span></label>
+                        <input type="text" id="pickupStreet" name="pickupStreet" required placeholder="Street Address (e.g., 123 Main St)">
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="pickupCity">City <span class="required">*</span></label>
+                            <input type="text" id="pickupCity" name="pickupCity" required placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label for="pickupProvince">Province <span class="required">*</span></label>
+                            <input type="text" id="pickupProvince" name="pickupProvince" required placeholder="Province">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -772,7 +783,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="pickupBedrooms">No. of bedrooms at pickup? <span class="required">*</span></label>
+                        <label for="pickupBedrooms">No. of bedrooms? <span class="required">*</span></label>
                         <select id="pickupBedrooms" name="pickupBedrooms" required>
                             <option value="">Select number of bedrooms</option>
                             <option value="Studio">Studio</option>
@@ -785,7 +796,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Elevator access at pick-up? <span class="required">*</span></label>
+                        <label>Elevator access? <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="pickupElevator" value="Yes" required>
@@ -799,7 +810,7 @@
                     </div>
 
                     <div class="form-group" id="pickupStairsGroup" style="display: none;">
-                        <label for="pickupStairs">No. of stairs at pickup (only if no elevator)?</label>
+                        <label for="pickupStairs">No. of stairs (only if no elevator)?</label>
                         <select id="pickupStairs" name="pickupStairs">
                             <option value="">Select number of stairs</option>
                             <option value="1">1</option>
@@ -867,8 +878,19 @@
                     <h3 class="section-title">Section 4: Moving To</h3>
                     
                     <div class="form-group">
-                        <label for="dropoffAddress">Drop-off Address <span class="required">*</span></label>
-                        <input type="text" id="dropoffAddress" name="dropoffAddress" required placeholder="456 Oak Ave, City, State ZIP">
+                        <label for="dropoffStreet">Street Address <span class="required">*</span></label>
+                        <input type="text" id="dropoffStreet" name="dropoffStreet" required placeholder="Street Address (e.g., 456 Oak Ave)">
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="dropoffCity">City <span class="required">*</span></label>
+                            <input type="text" id="dropoffCity" name="dropoffCity" required placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label for="dropoffProvince">Province <span class="required">*</span></label>
+                            <input type="text" id="dropoffProvince" name="dropoffProvince" required placeholder="Province">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -891,7 +913,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Type of Home (Drop-off) <span class="required">*</span></label>
+                        <label>Type of Home <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="dropoffHomeType" value="Apartment" required>
@@ -917,7 +939,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Elevator access at drop-off <span class="required">*</span></label>
+                        <label>Elevator access? <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="dropoffElevator" value="Yes" required>
@@ -931,7 +953,7 @@
                     </div>
 
                     <div class="form-group" id="dropoffStairsGroup" style="display: none;">
-                        <label for="dropoffStairs">No. of stairs at drop-off (only if no elevator)?</label>
+                        <label for="dropoffStairs">No. of stairs (only if no elevator)?</label>
                         <select id="dropoffStairs" name="dropoffStairs">
                             <option value="">Select number of stairs</option>
                             <option value="1">1</option>
@@ -942,7 +964,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Walking distance from the access point to the door of the unit at drop off <span class="required">*</span></label>
+                        <label>Walking distance from the access point to the door of the unit <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="dropoffWalkDistance" value="0-10 meters" required>
@@ -1469,6 +1491,12 @@
                 driveTimeMinutes = parseInt(driveTimeValue) || 0;
             }
             
+            // Combine pickup address fields
+            const pickupAddress = `${formData.get('pickupStreet')}, ${formData.get('pickupCity')}, ${formData.get('pickupProvince')}`;
+            
+            // Combine dropoff address fields
+            const dropoffAddress = `${formData.get('dropoffStreet')}, ${formData.get('dropoffCity')}, ${formData.get('dropoffProvince')}`;
+            
             const data = {
                 "Timestamp": new Date().toISOString(),
                 "Your name": formData.get('name'),
@@ -1477,14 +1505,14 @@
                 "Preferred Date of the Move": formData.get('moveDate'),
                 "Preferred Start Time": formData.get('startTime'),
                 "Date and Time flexibility - explain": formData.get('flexibility'),
-                "Pickup Address": formData.get('pickupAddress'),
+                "Pickup Address": pickupAddress,
                 "Type of Home": formData.get('pickupHomeType'),
                 "No. of bedrooms at pickup?": formData.get('pickupBedrooms'),
                 "Elevator access at pick-up?": formData.get('pickupElevator'),
                 "No. of stairs at pickup (only if no elevator)?": formData.get('pickupStairs') || null,
                 "Walk distance from the access point to the door of the unit": formData.get('pickupWalkDistance'),
                 "Item Volume": formData.get('itemVolume'),
-                "Drop-off Address": formData.get('dropoffAddress'),
+                "Drop-off Address": dropoffAddress,
                 "Drive time to the drop-off": driveTimeMinutes,
                 "Type of Home (Drop-off)": formData.get('dropoffHomeType'),
                 "Elevator access at drop-off": formData.get('dropoffElevator'),
